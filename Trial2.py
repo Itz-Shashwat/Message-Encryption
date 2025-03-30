@@ -141,17 +141,17 @@ tab1, tab2, tab3 = st.tabs(["Encrypt", "Decrypt", "Keys"])
 
 with tab1:
     st.subheader("Encrypt Message in Image")
-    image_file = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg"])
+    image_file = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg", "bmp", "gif", "tiff", "webp"])
     message = st.text_area("Secret Message")
-    
+
     if image_file and message:
         image = Image.open(image_file).convert("RGB")
         encrypted_image = hide_text(image, message, user_data['enc_key'].encode())
-        
+
         buf = io.BytesIO()
         encrypted_image.save(buf, format="PNG")
         byte_im = buf.getvalue()
-        
+
         st.download_button(
             label="Download Encrypted Image",
             data=byte_im,
@@ -162,9 +162,9 @@ with tab1:
 
 with tab2:
     st.subheader("Decrypt Message from Image")
-    enc_image = st.file_uploader("Upload Encrypted Image", type=["png"])
+    enc_image = st.file_uploader("Upload Encrypted Image", type=["png", "jpg", "jpeg", "bmp", "gif", "tiff", "webp"])
     dec_key = st.text_input("Enter Decryption Key", type="password")
-    
+
     if enc_image and dec_key:
         image = Image.open(enc_image)
         try:
@@ -172,6 +172,7 @@ with tab2:
             st.success(f"Hidden message: {secret}")
         except Exception as e:
             st.error("Decryption failed: Invalid key or corrupted image")
+
 
 with tab3:
     st.subheader("Your Keys")
